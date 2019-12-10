@@ -16,10 +16,11 @@ var TennisGame1 = function TennisGame1(player1Name, player2Name) {
  * @returns {void}
  */
 TennisGame1.prototype.wonPoint = function wonPoint(playerName) {
-    if (playerName === "player1")
+    if (playerName === this.player1Name) {
         this.player1Score += 1;
-    else
+    } else {
         this.player2Score += 1;
+    }
 };
 
 /**

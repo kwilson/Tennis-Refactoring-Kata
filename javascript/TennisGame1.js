@@ -1,3 +1,9 @@
+/**
+ * Tennis Game
+ * @constructor
+ * @param {string} player1Name Display name of player 1
+ * @param {string} player2Name Display name of player 1
+ */
 var TennisGame1 = function TennisGame1(player1Name, player2Name) {
     this.player1Score = 0;
     this.player2Score = 0;
@@ -5,6 +11,10 @@ var TennisGame1 = function TennisGame1(player1Name, player2Name) {
     this.player2Name = player2Name;
 };
 
+/**
+ * @param {string} playerName Name of the player who won the point
+ * @returns {void}
+ */
 TennisGame1.prototype.wonPoint = function wonPoint(playerName) {
     if (playerName === "player1")
         this.player1Score += 1;
@@ -12,6 +22,9 @@ TennisGame1.prototype.wonPoint = function wonPoint(playerName) {
         this.player2Score += 1;
 };
 
+/**
+ * @returns {string} The current score as a string.
+ */
 TennisGame1.prototype.getScore = function getScore() {
     var score = "";
     var tempScore = 0;

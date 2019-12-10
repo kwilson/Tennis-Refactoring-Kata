@@ -1,18 +1,18 @@
-var TennisGame1 = function(player1Name, player2Name) {
     this.m_score1 = 0;
     this.m_score2 = 0;
+var TennisGame1 = function TennisGame1(player1Name, player2Name) {
     this.player1Name = player1Name;
     this.player2Name = player2Name;
 };
 
-TennisGame1.prototype.wonPoint = function(playerName) {
+TennisGame1.prototype.wonPoint = function wonPoint(playerName) {
     if (playerName === "player1")
         this.m_score1 += 1;
     else
         this.m_score2 += 1;
 };
 
-TennisGame1.prototype.getScore = function() {
+TennisGame1.prototype.getScore = function getScore() {
     var score = "";
     var tempScore = 0;
     if (this.m_score1 === this.m_score2) {

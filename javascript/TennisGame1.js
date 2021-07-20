@@ -1,65 +1,107 @@
-var TennisGame1 = function(player1Name, player2Name) {
-    this.m_score1 = 0;
-    this.m_score2 = 0;
+/**
+ * Tennis Game
+ * @constructor
+ * @param {string} player1Name Display name of player 1
+ * @param {string} player2Name Display name of player 1
+ */
+var TennisGame1 = function TennisGame1(player1Name, player2Name) {
+    this.player1Score = 0;
+    this.player2Score = 0;
     this.player1Name = player1Name;
     this.player2Name = player2Name;
 };
 
-TennisGame1.prototype.wonPoint = function(playerName) {
-    if (playerName === "player1")
-        this.m_score1 += 1;
-    else
-        this.m_score2 += 1;
+/**
+ * @param {string} playerName Name of the player who won the point
+ * @returns {void}
+ */
+TennisGame1.prototype.wonPoint = function wonPoint(playerName) {
+    if (playerName === this.player1Name) {
+        this.player1Score += 1;
+    } else {
+        this.player2Score += 1;
+    }
 };
 
-TennisGame1.prototype.getScore = function() {
-    var score = "";
-    var tempScore = 0;
-    if (this.m_score1 === this.m_score2) {
-        switch (this.m_score1) {
-            case 0:
-                score = "Love-All";
-                break;
-            case 1:
-                score = "Fifteen-All";
-                break;
-            case 2:
-                score = "Thirty-All";
-                break;
-            default:
-                score = "Deuce";
-                break;
-        }
-    } else if (this.m_score1 >= 4 || this.m_score2 >= 4) {
-        var minusResult = this.m_score1 - this.m_score2;
-        if (minusResult === 1) score = "Advantage player1";
-        else if (minusResult === -1) score = "Advantage player2";
-        else if (minusResult >= 2) score = "Win for player1";
-        else score = "Win for player2";
-    } else {
-        for (var i = 1; i < 3; i++) {
-            if (i === 1) tempScore = this.m_score1;
-            else {
-                score += "-";
-                tempScore = this.m_score2;
-            }
-            switch (tempScore) {
-                case 0:
-                    score += "Love";
-                    break;
-                case 1:
-                    score += "Fifteen";
-                    break;
-                case 2:
-                    score += "Thirty";
-                    break;
-                case 3:
-                    score += "Forty";
-                    break;
-            }
-        }
+var scoreStrings = ['Love', 'Fifteen', 'Thirty', 'Forty'];
+
+/**
+ * Gets a score string from the numeric [0..4]
+ * @param {number} value
+ */
+function getScoreString(value) {
+    if (value > scoreStrings.length - 1) {
+        // Probably overkill to check this here since it's being covered by tests
+        // and it's a private function but worth discussing whether to return a default
+        // or throw an error.
+        return '';
     }
-    return score;
+
+    return scoreStrings[value];
+}
+
+/**
+ * Gets the 'advantage' string value.
+ * @param {string} playerName The player with the advantage
+ */
+function getAdvantageString(playerName) {
+    return "Advantage " + playerName;
+}
+
+/**
+ * Gets the 'win' string value.
+ * @param {string} playerName The player that has won
+ */
+function getWinString(playerName) {
+    return "Win for " + playerName;
+}
+
+/**
+ * Gets the 'draw' string value.
+ * @param {number} score 
+ */
+function getDrawString(score) {
+    if (score >= 3) {
+        return "Deuce";
+    }
+
+    return getScoreString(score) + "-All";
+}
+
+/**
+ * @returns {string} The current score as a string.
+ */
+TennisGame1.prototype.getScore = function getScore() {
+    // Handle currently drawing
+    if (this.player1Score === this.player2Score) {
+        return getDrawString(this.player1Score);
+    }
+    
+    // Handle being into advantage scoring
+    if (this.player1Score >= 4 || this.player2Score >= 4) {
+        var minusResult = this.player1Score - this.player2Score;
+
+        // Player1 in front by 1
+        if (minusResult === 1) {
+            return getAdvantageString(this.player1Name);
+        }
+        
+        // Player2 in front by 1
+        if (minusResult === -1) {
+            return getAdvantageString(this.player2Name);
+        }
+        
+        // Player1 in front by 2+
+        if (minusResult >= 2) {
+            return getWinString(this.player1Name);
+        }
+
+        // Player2 in front by 2+
+        return getWinString(this.player2Name);
+    }
+
+    // Handle ongoing game
+    return getScoreString(this.player1Score) + "-" + getScoreString(this.player2Score);
 };
 
 if (typeof window === "undefined") {
